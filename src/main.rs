@@ -46,7 +46,7 @@ fn main() {
     }
     push_html(&mut res, ps.into_iter());
 
-    ifclap.is_present("wrap") {
+    if clap.is_present("wrap") {
         res = wrap_html(&res, clap.value_of("css"));
     }
     println!("{}", res);
