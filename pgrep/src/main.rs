@@ -1,7 +1,7 @@
 use clap::{clap_app, crate_version};
 use regex::Regex;
 use std::path::Path;
-use std::fmt;
+//use std::fmt;
 use failure::{Error, Fail};
 #[derive(Debug)]
 struct Record {
@@ -9,19 +9,19 @@ struct Record {
     tx:String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Fail)]
+#[fail(display = "Argument not provided '{}'", arg)]
 struct ArgErr {
     arg: &'static str,
 }
-impl Fail for ArgErr {
-
-}
-
+//impl Fail for ArgErr { }
+/*
 impl fmt::Display for ArgErr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Argument Not Provided{}", self.arg)
+        write!(f, "Argument Not Provided: {}", self.arg)
     }
 }
+*/
 
 
 
@@ -43,7 +43,14 @@ fn process_file<P: AsRef<Path>>(p:P, re: Regex) -> Result<Vec<Record>, Error> {
 
     Ok(res)
 }
-fn main()-> Result<(), Error> {
+
+fn main() {
+    if let Err(e) = run() {
+        println!("There was an error: {}", e);
+    }
+}
+
+fn run()-> Result<(), Error> {
     let cp = clap_app!(
         pgrep => 
         (version: crate_version!())
